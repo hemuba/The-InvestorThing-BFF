@@ -41,4 +41,8 @@ public class ApiResponse <T> {
     public void setObject(T object) {
         this.object = object;
     }
+
+    public String getTraceId(){ return this.traceId; }
+
+    public void setTraceId(String traceId) {this.traceId = traceId;}
 }
