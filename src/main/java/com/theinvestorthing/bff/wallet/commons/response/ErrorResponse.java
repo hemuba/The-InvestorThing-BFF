@@ -7,17 +7,20 @@ public class ErrorResponse {
 
     private LocalDateTime timestamp;
     private int status;
+    private String traceId;
     private String path;
     private Map<String, String> errors;
 
     public ErrorResponse() {
     }
 
-    public ErrorResponse(LocalDateTime timestamp, int status, String path, Map<String, String> errors) {
+    public ErrorResponse(LocalDateTime timestamp, int status, String traceId, String path, Map<String, String> errors) {
         this.timestamp = timestamp;
         this.status = status;
+        this.traceId = traceId;
         this.path = path;
         this.errors = errors;
+
     }
 
     public LocalDateTime getTimestamp() {
@@ -36,6 +39,11 @@ public class ErrorResponse {
         this.status = status;
     }
 
+    public String getTraceId(){ return  this.traceId; }
+
+    public void setTraceId(String traceId){
+        this.traceId = traceId;
+    }
     public String getPath() {
         return path;
     }

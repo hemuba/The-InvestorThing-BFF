@@ -6,6 +6,17 @@ public class ApiResponse <T> {
     private LocalDateTime timestamp;
     private int status;
     private T object;
+    private String traceId;
+
+    public ApiResponse() {
+    }
+
+    public ApiResponse(LocalDateTime timestamp, int status, T object, String traceId) {
+        this.timestamp = timestamp;
+        this.status = status;
+        this.object = object;
+        this.traceId = traceId;
+    }
 
     public LocalDateTime getTimestamp() {
         return timestamp;
@@ -28,15 +39,6 @@ public class ApiResponse <T> {
     }
 
     public void setObject(T object) {
-        this.object = object;
-    }
-
-    public ApiResponse() {
-    }
-
-    public ApiResponse(LocalDateTime timestamp, int status, T object) {
-        this.timestamp = timestamp;
-        this.status = status;
         this.object = object;
     }
 }
