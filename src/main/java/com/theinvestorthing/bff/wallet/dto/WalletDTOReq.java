@@ -1,4 +1,4 @@
-package com.theinvestorthing.bff.dto;
+package com.theinvestorthing.bff.wallet.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

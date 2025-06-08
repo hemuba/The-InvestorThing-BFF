@@ -1,4 +1,4 @@
-package com.theinvestorthing.bff.dto;
+package com.theinvestorthing.bff.wallet.dto;
 
 import java.math.BigDecimal;
 
