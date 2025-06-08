@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/bff-wallet")
+@RequestMapping("/the-investorthing-bff-wallet")
 @Validated
 public class WalletController {
 
@@ -29,6 +30,15 @@ public class WalletController {
     public Mono<ResponseEntity<ApiResponse<List<WalletDTOResp>>>> getWalletFromBE(){
         String traceId = UUID.randomUUID().toString();
         return walletService.getWalletFromBE(traceId)
+                .map(ResponseEntity::ok);
+    }
+
+    @GetMapping("/by-ticker")
+    public Mono<ResponseEntity<ApiResponse<WalletDTOResp>>> getTickerFromBe(
+            @RequestParam String ticker
+    ){
+        String traceId = UUID.randomUUID().toString();
+        return walletService.getTickerFromBE(traceId, ticker)
                 .map(ResponseEntity::ok);
     }
 }

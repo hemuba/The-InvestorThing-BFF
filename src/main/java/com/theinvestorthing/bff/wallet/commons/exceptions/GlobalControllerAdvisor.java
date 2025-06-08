@@ -14,6 +14,7 @@ import com.theinvestorthing.bff.wallet.commons.response.ErrorResponse;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestControllerAdvice
 public class GlobalControllerAdvisor {
@@ -22,7 +23,7 @@ public class GlobalControllerAdvisor {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> notFoundExceptionHandler(NotFoundException exception, HttpServletRequest req){
-        String traceId = req.getHeader("x-trace-id");
+        String traceId = UUID.randomUUID().toString();
         Map<String, String> errors = new HashMap<>();
         errors.put("Error", exception.getMessage());
         logger.error("404 - {}, traceId: {}", exception.getMessage(), traceId);
