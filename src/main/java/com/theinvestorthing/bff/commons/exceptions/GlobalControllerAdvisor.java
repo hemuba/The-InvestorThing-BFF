@@ -22,7 +22,9 @@ public class GlobalControllerAdvisor {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> notFoundExceptionHandler(NotFoundException exception, HttpServletRequest req){
-        String traceId = UUID.randomUUID().toString();
+        String traceId = req.getHeader("x-trace-id") == null || req.getHeader("x-trace-id").isBlank() ?
+                UUID.randomUUID().toString() :
+                req.getHeader("x-trace-id");
         Map<String, String> errors = new HashMap<>();
         errors.put("Error", exception.getMessage());
         logger.error("404 - {}, traceId: {}", exception.getMessage(), traceId);
@@ -37,7 +39,9 @@ public class GlobalControllerAdvisor {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(BadRequestException exception, HttpServletRequest req){
-        String traceId = req.getHeader("x-trace-id");
+        String traceId = req.getHeader("x-trace-id") == null || req.getHeader("x-trace-id").isBlank() ?
+                UUID.randomUUID().toString() :
+                req.getHeader("x-trace-id");
         Map<String, String> errors = new HashMap<>();
         errors.put("Error", exception.getMessage());
         logger.error("400 - {}, traceId: {}", exception.getMessage(), traceId);
