@@ -1,4 +1,4 @@
-package com.theinvestorthing.bff.wallet.commons.response;
+package com.theinvestorthing.bff.commons.response;
 
 import java.time.LocalDateTime;
 import java.util.Map;

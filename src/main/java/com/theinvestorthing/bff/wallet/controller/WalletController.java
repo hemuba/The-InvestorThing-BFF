@@ -1,7 +1,7 @@
-package com.theinvestorthing.bff.controller;
+package com.theinvestorthing.bff.wallet.controller;
 
 
-import com.theinvestorthing.bff.wallet.commons.response.ApiResponse;
+import com.theinvestorthing.bff.commons.response.ApiResponse;
 import com.theinvestorthing.bff.wallet.dto.WalletDTOResp;
 import com.theinvestorthing.bff.wallet.service.WalletService;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +39,15 @@ public class WalletController {
     ){
         String traceId = UUID.randomUUID().toString();
         return walletService.getTickerFromBE(traceId, ticker)
+                .map(ResponseEntity::ok);
+    }
+
+    @GetMapping("/greater-than")
+    public Mono<ResponseEntity<ApiResponse<List<WalletDTOResp>>>> getStocksHavingReturnGreaterThan(
+            @RequestParam Double value
+    ) {
+        String traceId = UUID.randomUUID().toString();
+        return walletService.getStocksHavingCurrentReturnGreaterThan(traceId, value)
                 .map(ResponseEntity::ok);
     }
 }

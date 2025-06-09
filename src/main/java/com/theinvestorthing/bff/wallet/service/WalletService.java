@@ -1,12 +1,10 @@
 package com.theinvestorthing.bff.wallet.service;
 
-import com.theinvestorthing.bff.wallet.commons.exceptions.NotFoundException;
-import com.theinvestorthing.bff.wallet.commons.response.ApiResponse;
-import com.theinvestorthing.bff.wallet.commons.response.ErrorResponse;
+import com.theinvestorthing.bff.commons.exceptions.NotFoundException;
+import com.theinvestorthing.bff.commons.response.ApiResponse;
+import com.theinvestorthing.bff.commons.response.ErrorResponse;
 import com.theinvestorthing.bff.wallet.dto.WalletDTOResp;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -53,6 +51,29 @@ public class WalletService {
                                 .flatMap(Mono::error)
                 )
                 .bodyToMono(new ParameterizedTypeReference<ApiResponse<WalletDTOResp>>() {});
+    }
+
+    public Mono<ApiResponse<List<WalletDTOResp>>> getStocksHavingCurrentReturnGreaterThan(String traceId, Double value){
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/my-stocks/by-current-return-greater-than")
+                        .queryParam("value", value)
+                        .build())
+                .header("x-trace-id", traceId)
+                .retrieve()
+                .onStatus(
+                        status -> status.is4xxClientError(),
+                        resp -> resp.bodyToMono(ErrorResponse.class)
+                                .map(error -> new NotFoundException("Client error: " + error.getErrors()))
+                                .flatMap(Mono::error)
+                )
+                .onStatus(
+                        status -> status.is5xxServerError(),
+                        resp -> resp.bodyToMono(ErrorResponse.class)
+                                .map(error -> new RuntimeException("Server error: " + error.getErrors()))
+                                .flatMap(Mono::error)
+                )
+                .bodyToMono(new ParameterizedTypeReference<ApiResponse<List<WalletDTOResp>>>() {});
     }
 
 }
