@@ -5,6 +5,7 @@ import com.theinvestorthing.bff.commons.response.ApiResponse;
 import com.theinvestorthing.bff.commons.response.ErrorResponse;
 import com.theinvestorthing.bff.wallet.dto.WalletDTOResp;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -39,13 +40,13 @@ public class WalletService {
                 .header("x-trace-id", traceId)
                 .retrieve()
                 .onStatus(
-                        status -> status.value() >= 400 && status.value() < 500,
+                        HttpStatusCode::is4xxClientError,
                         response -> response.bodyToMono(ErrorResponse.class)
                                 .map(error -> new NotFoundException("Client error: " + error.getErrors()))
                                 .flatMap(Mono::error)
                 )
                 .onStatus(
-                        status -> status.value() >= 500,
+                        HttpStatusCode::is5xxServerError,
                         response -> response.bodyToMono(ErrorResponse.class)
                                 .map(error -> new RuntimeException("Server error: " + error.getErrors()))
                                 .flatMap(Mono::error)
@@ -62,13 +63,13 @@ public class WalletService {
                 .header("x-trace-id", traceId)
                 .retrieve()
                 .onStatus(
-                        status -> status.is4xxClientError(),
+                        HttpStatusCode::is4xxClientError,
                         resp -> resp.bodyToMono(ErrorResponse.class)
                                 .map(error -> new NotFoundException("Client error: " + error.getErrors()))
                                 .flatMap(Mono::error)
                 )
                 .onStatus(
-                        status -> status.is5xxServerError(),
+                        HttpStatusCode::is5xxServerError,
                         resp -> resp.bodyToMono(ErrorResponse.class)
                                 .map(error -> new RuntimeException("Server error: " + error.getErrors()))
                                 .flatMap(Mono::error)
