@@ -12,7 +12,7 @@
 	<artifactId>bff</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bff</name>
-	<description>Client/BFF for TheInvestorThing BE</description>
+	<value>Client/BFF for TheInvestorThing BE</value>
 	<url/>
 	<licenses>
 		<license/>

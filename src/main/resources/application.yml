@@ -4,6 +4,11 @@ spring:
     version: 0.1.1
     module: BFF
     author: Alessandro De Vincenti
+  be-config:
+    protocol: http
+    host: localhost
+    port: 8080
+    app-name: the-investorthing
   profiles:
     active: dev
 

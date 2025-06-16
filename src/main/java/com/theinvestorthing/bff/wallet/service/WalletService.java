@@ -3,11 +3,14 @@ package com.theinvestorthing.bff.wallet.service;
 import com.theinvestorthing.bff.commons.exceptions.NotFoundException;
 import com.theinvestorthing.bff.commons.response.ApiResponse;
 import com.theinvestorthing.bff.commons.response.ErrorResponse;
+import com.theinvestorthing.bff.commons.serverconfig.ServerProperties;
 import com.theinvestorthing.bff.wallet.dto.WalletDTOResp;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -16,10 +19,20 @@ import java.util.List;
 public class WalletService {
 
     private final WebClient webClient;
+    private final ServerProperties serverProperties;
 
-    public WalletService(WebClient.Builder builder){
+
+    public WalletService(WebClient.Builder builder, ServerProperties serverProperties){
+        this.serverProperties = serverProperties;
+        String baseUrl = UriComponentsBuilder.newInstance()
+                .scheme(serverProperties.getProtocol())
+                .host(serverProperties.getHost())
+                .port(serverProperties.getPort())
+                .pathSegment(serverProperties.getAppName())
+                .build()
+                .toUriString();
         this.webClient = builder
-                .baseUrl("http://localhost:8080/the-investorthing")
+                .baseUrl(baseUrl)
                 .build();
     }
 
